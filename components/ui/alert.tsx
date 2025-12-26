@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
+import { clsx } from "clsx"
 
 type AlertVariant = "default" | "destructive"
 
@@ -22,7 +22,7 @@ function Alert({
     <div
       data-slot="alert"
       role="alert"
-      className={cn(baseClasses, variantClasses[variant], className)}
+      className={clsx(baseClasses, variantClasses[variant], className)}
       {...props}
     />
   )
@@ -32,7 +32,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="alert-title"
-      className={cn(
+      className={clsx(
         "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
         className
       )}
@@ -48,7 +48,7 @@ function AlertDescription({
   return (
     <div
       data-slot="alert-description"
-      className={cn(
+      className={clsx(
         "text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed",
         className
       )}
