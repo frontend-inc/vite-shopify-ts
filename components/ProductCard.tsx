@@ -4,6 +4,7 @@ import { useCart } from '../contexts/CartContext';
 import { truncate } from '../lib/utils';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { Card, CardContent } from './ui/card';
 
 interface ProductImage {
   url: string;
@@ -96,7 +97,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
+    <Card className="hover:shadow-xl transition-shadow duration-300 overflow-hidden group py-0 gap-0">
       {/* Product Image */}
       <div className="aspect-square overflow-hidden bg-gray-100 relative">
         {firstImage ? (
@@ -112,7 +113,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             <i className="ri-image-line text-6xl"></i>
           </div>
         )}
-        
+
         {/* Discount Badge */}
         {hasDiscount && compareAtPrice && (
           <Badge variant="destructive" className="absolute top-3 left-3">
@@ -122,7 +123,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       </div>
 
       {/* Product Info */}
-      <div className="p-6">
+      <CardContent className="p-6">
         <h3 className="text-xl font-semibold text-gray-900 mb-1 min-h-[3.5rem] font-heading">
           {truncate(product.title, 40)}
         </h3>
@@ -146,8 +147,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             View Details
           </Button>
         </Link>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
