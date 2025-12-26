@@ -1,5 +1,7 @@
 import React from 'react';
 import { Product, ProductVariant } from './index.tsx';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
 
 interface ProductDetailInfoProps {
   product: Product;
@@ -33,10 +35,7 @@ const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
 
   return (
     <div>
-      <h1 
-        className="text-4xl font-bold text-gray-900 mb-4"
-        style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-      >
+      <h1 className="text-4xl font-bold text-gray-900 mb-4 font-heading">
         {product.title}
       </h1>
 
@@ -50,9 +49,9 @@ const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
             <span className="text-xl text-gray-500 line-through">
               {formatPrice(compareAtPrice)}
             </span>
-            <div className="bg-red-100 text-red-800 text-sm font-semibold px-3 py-1 rounded">
+            <Badge variant="destructive">
               {Math.round(((parseFloat(compareAtPrice.amount) - parseFloat(price.amount)) / parseFloat(compareAtPrice.amount)) * 100)}% OFF
-            </div>
+            </Badge>
           </>
         )}
       </div>
@@ -76,17 +75,13 @@ const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
           </label>
           <div className="flex flex-wrap gap-2">
             {option.values.map(value => (
-              <button
+              <Button
                 key={value}
                 onClick={() => onOptionChange(option.name, value)}
-                className={`px-4 py-2 border rounded-lg font-medium transition-colors ${
-                  selectedOptions[option.name] === value
-                    ? 'border-black bg-black text-white'
-                    : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                }`}
+                variant={selectedOptions[option.name] === value ? 'default' : 'outline'}
               >
                 {value}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -97,37 +92,35 @@ const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
         <label className="block text-sm font-semibold text-gray-700 mb-2">
           Quantity
         </label>
-        <div className="flex items-center border border-gray-300 rounded-lg w-32">
-          <button
+        <div className="flex items-center border border-gray-300 rounded-lg w-fit">
+          <Button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="p-2 hover:bg-gray-100 transition-colors"
+            variant="ghost"
+            size="icon-sm"
             disabled={quantity <= 1}
           >
             <i className="ri-subtract-line"></i>
-          </button>
-          <span className="flex-1 text-center font-semibold">{quantity}</span>
-          <button
+          </Button>
+          <span className="w-10 text-center font-semibold">{quantity}</span>
+          <Button
             onClick={() => setQuantity(quantity + 1)}
-            className="p-2 hover:bg-gray-100 transition-colors"
+            variant="ghost"
+            size="icon-sm"
           >
             <i className="ri-add-line"></i>
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Add to Cart Button */}
-      <button
+      <Button
         onClick={handleAddToCart}
         disabled={!selectedVariant?.availableForSale}
-        className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-200 ${
-          selectedVariant?.availableForSale
-            ? 'bg-black text-white hover:bg-gray-800 active:scale-95'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-        }`}
-        style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+        size="lg"
+        className="w-full text-lg font-heading"
       >
         {selectedVariant?.availableForSale ? 'Add to Cart' : 'Out of Stock'}
-      </button>
+      </Button>
 
       {/* Additional Info */}
       <div className="mt-8 pt-8 border-t border-gray-200">

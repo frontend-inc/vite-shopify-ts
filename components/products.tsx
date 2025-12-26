@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import { getProducts } from '../services/shopify/api.js';
+import { Button } from './ui/button';
+import { Spinner } from './ui/spinner';
 
 interface ProductImage {
   url: string;
@@ -116,10 +118,7 @@ const Products: React.FC<ProductsProps> = ({
     return (
       <div className="py-16">
         <div className="container mx-auto px-4">
-          <h2 
-            className="text-4xl font-bold text-center mb-12"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
+          <h2 className="text-4xl font-bold text-center mb-12 font-heading">
             {title}
           </h2>
           
@@ -146,27 +145,24 @@ const Products: React.FC<ProductsProps> = ({
     return (
       <div className="py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 
-            className="text-4xl font-bold mb-8"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
+          <h2 className="text-4xl font-bold mb-8 font-heading">
             {title}
           </h2>
           
           <div className="bg-red-50 border border-red-200 rounded-lg p-8 max-w-md mx-auto">
-            <i className="ri-error-warning-line text-4xl text-red-500 mb-4"></i>
+            <i className="ri-error-warning-line text-4xl text-red-500 mb-4 block"></i>
             <h3 className="text-lg font-semibold text-red-800 mb-2">
               Failed to Load Products
             </h3>
             <p className="text-red-600 mb-4">
               {error}
             </p>
-            <button
+            <Button
               onClick={() => fetchProducts()}
-              className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              variant="destructive"
             >
               Try Again
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -177,10 +173,7 @@ const Products: React.FC<ProductsProps> = ({
     return (
       <div className="py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 
-            className="text-4xl font-bold mb-8"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
+          <h2 className="text-4xl font-bold mb-8 font-heading">
             {title}
           </h2>
           
@@ -201,10 +194,7 @@ const Products: React.FC<ProductsProps> = ({
   return (
     <div className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <h2 
-          className="text-5xl font-bold text-center mb-16 text-gray-900"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-        >
+        <h2 className="text-5xl font-bold text-center mb-16 text-gray-900 font-heading">
           {title}
         </h2>
 
@@ -222,25 +212,21 @@ const Products: React.FC<ProductsProps> = ({
         {/* Load More Button */}
         {showLoadMore && hasMoreProducts && (
           <div className="text-center">
-            <button
+            <Button
               onClick={handleLoadMore}
               disabled={loadingMore}
-              className={`px-8 py-4 rounded-lg font-semibold transition-all duration-200 ${
-                loadingMore
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-black text-white hover:bg-gray-800 active:scale-95'
-              }`}
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              size="lg"
+              className="font-heading"
             >
               {loadingMore ? (
                 <span className="flex items-center space-x-2">
-                  <i className="ri-loader-4-line animate-spin"></i>
+                  <Spinner size="sm" />
                   <span>Loading...</span>
                 </span>
               ) : (
                 'Load More Products'
               )}
-            </button>
+            </Button>
           </div>
         )}
       </div>

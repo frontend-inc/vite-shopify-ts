@@ -87,10 +87,7 @@ const CollectionDetail: React.FC = () => {
     return (
       <div className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 
-            className="text-5xl font-bold text-center mb-16 text-gray-900"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
+          <h2 className="text-5xl font-bold text-center mb-16 text-gray-900 font-heading">
             Collection
           </h2>
           
@@ -117,10 +114,7 @@ const CollectionDetail: React.FC = () => {
     return (
       <div className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
-          <h2 
-            className="text-5xl font-bold mb-8"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
+          <h2 className="text-5xl font-bold mb-8 font-heading">
             Collection
           </h2>
           
@@ -147,10 +141,7 @@ const CollectionDetail: React.FC = () => {
   return (
     <div className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <h2 
-          className="text-5xl font-bold text-center mb-16 text-gray-900"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-        >
+        <h2 className="text-5xl font-bold text-center mb-16 text-gray-900 font-heading">
           {collectionTitle}
         </h2>
 

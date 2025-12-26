@@ -40,10 +40,7 @@ const ProductRecommendations: React.FC<ProductRecommendationsProps> = ({ product
   return (
     <div className="bg-gray-50 py-16">
       <div className="container mx-auto px-4">
-        <h2 
-          className="text-4xl font-bold text-center mb-12 text-gray-900"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-        >
+        <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 font-heading">
           You Might Also Like
         </h2>
 

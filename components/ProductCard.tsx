@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { truncate } from '../lib/utils';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
 
 interface ProductImage {
   url: string;
@@ -113,18 +115,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         
         {/* Discount Badge */}
         {hasDiscount && compareAtPrice && (
-          <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+          <Badge variant="destructive" className="absolute top-3 left-3">
             {Math.round(((parseFloat(compareAtPrice.amount) - parseFloat(price.amount)) / parseFloat(compareAtPrice.amount)) * 100)}% OFF
-          </div>
+          </Badge>
         )}
       </div>
 
       {/* Product Info */}
       <div className="p-6">
-        <h3
-          className="text-xl font-semibold text-gray-900 mb-1 min-h-[3.5rem]"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-        >
+        <h3 className="text-xl font-semibold text-gray-900 mb-1 min-h-[3.5rem] font-heading">
           {truncate(product.title, 40)}
         </h3>
 
@@ -142,12 +141,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         </div>
 
         {/* View Details Button */}
-        <Link
-          to={`/products/${product.handle}`}
-          className="w-full block py-3 px-4 rounded-lg font-semibold transition-all duration-200 bg-black text-white hover:bg-gray-800 active:scale-95 text-center"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-        >
-          View Details
+        <Link to={`/products/${product.handle}`}>
+          <Button className="w-full font-heading">
+            View Details
+          </Button>
         </Link>
       </div>
     </div>
