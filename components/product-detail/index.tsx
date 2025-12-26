@@ -5,6 +5,8 @@ import { useCart } from '../../contexts/CartContext';
 import ProductDetailGallery from './ProductDetailGallery';
 import ProductDetailInfo from './ProductDetailInfo';
 import ProductRecommendations from './ProductRecommendations';
+import { Button } from '../ui/button';
+import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
 
 interface ProductImage {
   url: string;
@@ -190,21 +192,21 @@ const ProductDetail: React.FC = () => {
   if (error || !product) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-8 max-w-md mx-auto">
-          <i className="ri-error-warning-line text-4xl text-red-500 mb-4"></i>
-          <h3 className="text-lg font-semibold text-red-800 mb-2">
+        <Alert variant="destructive" className="max-w-md mx-auto p-8">
+          <i className="ri-error-warning-line text-4xl"></i>
+          <AlertTitle className="text-lg font-semibold">
             Product Not Found
-          </h3>
-          <p className="text-red-600 mb-4">
+          </AlertTitle>
+          <AlertDescription className="mb-4">
             {error || 'The requested product could not be found.'}
-          </p>
-          <button
+          </AlertDescription>
+          <Button
             onClick={() => window.history.back()}
-            className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+            variant="destructive"
           >
             Go Back
-          </button>
-        </div>
+          </Button>
+        </Alert>
       </div>
     );
   }

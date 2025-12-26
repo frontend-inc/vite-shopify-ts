@@ -8,11 +8,11 @@ const CartIcon: React.FC = () => {
   return (
     <button
       onClick={toggleCart}
-      className="relative p-2 text-black hover:text-gray-600 transition-colors"
+      className="relative p-1 text-black hover:text-gray-600 transition-colors"
     >
-      <i className="ri-shopping-cart-line text-2xl"></i>
+      <i className="ri-shopping-cart-line text-xl"></i>
       {state.itemCount > 0 && (
-        <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-semibold">
+        <span className="absolute -top-1 -right-1 bg-black text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-semibold">
           {state.itemCount > 99 ? '99+' : state.itemCount}
         </span>
       )}
@@ -22,27 +22,25 @@ const CartIcon: React.FC = () => {
 
 const Header: React.FC = () => {
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-30">
-      <div className="max-w-6xl mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
+    <nav className="bg-white shadow-sm sticky top-0 z-30 h-14">
+      <div className="max-w-6xl mx-auto px-4 h-full">
+        <div className="flex justify-between items-center h-full">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-black" style={{fontFamily: 'Space Grotesk, sans-serif'}}>
+          <Link to="/" className="text-lg font-bold text-black font-heading">
             Store
           </Link>
 
           {/* Navigation Links */}
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-6">
             <Link
               to="/"
-              className="text-black hover:text-gray-600 font-medium transition-colors"
-              style={{fontFamily: 'Space Grotesk, sans-serif'}}
+              className="text-sm text-black hover:text-gray-600 font-medium transition-colors font-heading"
             >
               Products
             </Link>
             <Link
               to="/collections"
-              className="text-black hover:text-gray-600 font-medium transition-colors"
-              style={{fontFamily: 'Space Grotesk, sans-serif'}}
+              className="text-sm text-black hover:text-gray-600 font-medium transition-colors font-heading"
             >
               Collections
             </Link>

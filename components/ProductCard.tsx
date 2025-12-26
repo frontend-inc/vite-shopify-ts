@@ -123,10 +123,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
       {/* Product Info */}
       <div className="p-6">
-        <h3
-          className="text-xl font-semibold text-gray-900 mb-1 min-h-[3.5rem]"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-        >
+        <h3 className="text-xl font-semibold text-gray-900 mb-1 min-h-[3.5rem] font-heading">
           {truncate(product.title, 40)}
         </h3>
 
@@ -145,10 +142,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
         {/* View Details Button */}
         <Link to={`/products/${product.handle}`}>
-          <Button
-            className="w-full"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-          >
+          <Button className="w-full font-heading">
             View Details
           </Button>
         </Link>
