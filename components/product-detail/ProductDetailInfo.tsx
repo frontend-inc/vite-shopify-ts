@@ -25,7 +25,7 @@ const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
   const formatPrice = (price: { amount: string; currencyCode: string }) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: price.currencyCode,
+      currency: 'USD',
     }).format(parseFloat(price.amount));
   };
 
@@ -41,7 +41,7 @@ const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
 
       {/* Price */}
       <div className="flex items-center space-x-4 mb-6">
-        <span className="text-3xl font-bold text-gray-900">
+        <span className="text-2xl font-bold text-gray-900">
           {formatPrice(price)}
         </span>
         {hasDiscount && compareAtPrice && (
