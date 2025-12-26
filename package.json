@@ -12,8 +12,12 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
-    "lucide-react": "^0.544.0",
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
+    "input-otp": "^1.4.2",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.23.26",    
+    "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
