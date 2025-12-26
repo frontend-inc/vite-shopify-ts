@@ -1,32 +1,28 @@
 import * as React from "react"
-import { clsx } from "clsx"
 
-type AlertVariant = 'default' | 'destructive';
+import { cn } from "@/lib/utils"
 
-interface AlertProps extends React.ComponentProps<"div"> {
-  variant?: AlertVariant;
-}
+type AlertVariant = "default" | "destructive"
 
-const alertVariants: Record<AlertVariant, string> = {
+const baseClasses =
+  "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current"
+
+const variantClasses: Record<AlertVariant, string> = {
   default: "bg-card text-card-foreground",
   destructive:
     "text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90",
-};
+}
 
 function Alert({
   className,
-  variant = 'default',
+  variant = "default",
   ...props
-}: AlertProps) {
-  const baseClasses = clsx(
-    "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current"
-  );
-
+}: React.ComponentProps<"div"> & { variant?: AlertVariant }) {
   return (
     <div
       data-slot="alert"
       role="alert"
-      className={clsx(baseClasses, alertVariants[variant], className)}
+      className={cn(baseClasses, variantClasses[variant], className)}
       {...props}
     />
   )
@@ -36,7 +32,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="alert-title"
-      className={clsx(
+      className={cn(
         "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
         className
       )}
@@ -52,7 +48,7 @@ function AlertDescription({
   return (
     <div
       data-slot="alert-description"
-      className={clsx(
+      className={cn(
         "text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed",
         className
       )}
@@ -62,4 +58,3 @@ function AlertDescription({
 }
 
 export { Alert, AlertTitle, AlertDescription }
-export type { AlertProps };
