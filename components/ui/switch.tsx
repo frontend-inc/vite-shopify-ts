@@ -1,5 +1,5 @@
 import React from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface SwitchProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -39,7 +39,7 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         />
         <div
           data-slot="switch"
-          className={clsx(
+          className={cn(
             'inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:ring-[3px]',
             isChecked
               ? 'bg-primary focus-visible:ring-ring/50 focus-visible:border-ring'
@@ -56,7 +56,7 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         >
           <div
             data-slot="switch-thumb"
-            className={clsx(
+            className={cn(
               'bg-background dark:bg-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform',
               isChecked
                 ? 'translate-x-[calc(100%-2px)] dark:bg-primary-foreground'

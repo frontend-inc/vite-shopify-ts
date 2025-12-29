@@ -1,5 +1,5 @@
 import React from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface AvatarProps extends React.ComponentProps<'div'> {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -18,7 +18,7 @@ function Avatar({ className, size = 'md', ...props }: AvatarProps) {
   return (
     <div
       data-slot="avatar"
-      className={clsx(
+      className={cn(
         'relative flex shrink-0 overflow-hidden rounded-full',
         sizeClasses[size],
         className
@@ -47,7 +47,7 @@ function AvatarImage({
   return (
     <img
       data-slot="avatar-image"
-      className={clsx('aspect-square h-full w-full object-cover', className)}
+      className={cn('aspect-square h-full w-full object-cover', className)}
       onError={handleError}
       {...props}
     />
@@ -66,7 +66,7 @@ function AvatarFallback({
   return (
     <div
       data-slot="avatar-fallback"
-      className={clsx(
+      className={cn(
         'bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full font-medium text-sm',
         className
       )}

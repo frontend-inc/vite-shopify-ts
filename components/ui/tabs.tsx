@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface TabsContextType {
   activeTab: string;
@@ -47,7 +47,7 @@ function Tabs({
     >
       <div
         data-slot="tabs"
-        className={clsx('flex flex-col gap-2', className)}
+        className={cn('flex flex-col gap-2', className)}
         {...props}
       >
         {children}
@@ -64,7 +64,7 @@ function TabsList({ className, children, ...props }: TabsListProps) {
   return (
     <div
       data-slot="tabs-list"
-      className={clsx(
+      className={cn(
         'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
         className
       )}
@@ -96,7 +96,7 @@ function TabsTrigger({
       role="tab"
       aria-selected={isActive}
       aria-controls={`tabs-content-${value}`}
-      className={clsx(
+      className={cn(
         'text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
         isActive &&
           'bg-background dark:bg-input/30 dark:border-input shadow-sm',
@@ -132,7 +132,7 @@ function TabsContent({
       data-slot="tabs-content"
       role="tabpanel"
       id={`tabs-content-${value}`}
-      className={clsx('flex-1 outline-none', className)}
+      className={cn('flex-1 outline-none', className)}
       {...props}
     >
       {children}

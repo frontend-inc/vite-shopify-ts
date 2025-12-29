@@ -1,5 +1,5 @@
 import React from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface SpinnerProps extends React.ComponentProps<'svg'> {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -26,7 +26,7 @@ function Spinner({ className, size = 'md', ...props }: SpinnerProps) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={clsx('animate-spin', sizeClasses[size], className)}
+      className={cn('animate-spin', sizeClasses[size], className)}
       {...props}
     >
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext, createContext } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface DialogContextType {
   open: boolean;
@@ -118,7 +118,7 @@ function DialogOverlay({ className, onClick, ...props }: DialogOverlayProps) {
   return (
     <motion.div
       data-slot="dialog-overlay"
-      className={clsx('fixed inset-0 z-50 bg-black/50', className)}
+      className={cn('fixed inset-0 z-50 bg-black/50', className)}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -152,7 +152,7 @@ function DialogContent({
             <DialogOverlay />
             <motion.div
               data-slot="dialog-content"
-              className={clsx(
+              className={cn(
                 'bg-background fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border border-border p-6 shadow-lg',
                 className
               )}
@@ -200,7 +200,7 @@ function DialogHeader({
   return (
     <div
       data-slot="dialog-header"
-      className={clsx(
+      className={cn(
         'flex flex-col gap-2 text-center sm:text-left',
         className
       )}
@@ -216,7 +216,7 @@ function DialogFooter({
   return (
     <div
       data-slot="dialog-footer"
-      className={clsx(
+      className={cn(
         'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
         className
       )}
@@ -232,7 +232,7 @@ function DialogTitle({
   return (
     <h2
       data-slot="dialog-title"
-      className={clsx('text-lg leading-none font-semibold', className)}
+      className={cn('text-lg leading-none font-semibold', className)}
       {...props}
     />
   );
@@ -245,7 +245,7 @@ function DialogDescription({
   return (
     <p
       data-slot="dialog-description"
-      className={clsx('text-muted-foreground text-sm', className)}
+      className={cn('text-muted-foreground text-sm', className)}
       {...props}
     />
   );

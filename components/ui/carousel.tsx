@@ -6,7 +6,7 @@ import React, {
   useRef,
   useEffect,
 } from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 import { Button } from './button';
 
 interface CarouselContextType {
@@ -93,7 +93,7 @@ function Carousel({
       }}
     >
       <div
-        className={clsx('relative', className)}
+        className={cn('relative', className)}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
@@ -114,11 +114,11 @@ function CarouselContent({ className, children }: CarouselContentProps) {
 
   return (
     <div
-      className={clsx('overflow-hidden', className)}
+      className={cn('overflow-hidden', className)}
       data-slot="carousel-content"
     >
       <div
-        className={clsx(
+        className={cn(
           'flex transition-transform duration-300 ease-out',
           orientation === 'horizontal' ? 'flex-row' : 'flex-col'
         )}
@@ -148,7 +148,7 @@ function CarouselItem({ className, children }: CarouselItemProps) {
       role="group"
       aria-roledescription="slide"
       data-slot="carousel-item"
-      className={clsx('min-w-0 shrink-0 grow-0 basis-full', className)}
+      className={cn('min-w-0 shrink-0 grow-0 basis-full', className)}
     >
       {children}
     </div>
@@ -168,7 +168,7 @@ function CarouselPrevious({ className }: CarouselPreviousProps) {
       variant="outline"
       onClick={scrollPrev}
       disabled={!canScrollPrev}
-      className={clsx(
+      className={cn(
         'absolute size-10 rounded-full p-0 flex items-center justify-center',
         orientation === 'horizontal'
           ? 'top-1/2 left-2 -translate-y-1/2'
@@ -208,7 +208,7 @@ function CarouselNext({ className }: CarouselNextProps) {
       variant="outline"
       onClick={scrollNext}
       disabled={!canScrollNext}
-      className={clsx(
+      className={cn(
         'absolute size-10 rounded-full p-0 flex items-center justify-center',
         orientation === 'horizontal'
           ? 'top-1/2 right-2 -translate-y-1/2'

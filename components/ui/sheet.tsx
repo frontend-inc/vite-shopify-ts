@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext, createContext } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface SheetContextType {
   open: boolean;
@@ -97,7 +97,7 @@ function SheetOverlay({
   return (
     <motion.div
       data-slot="sheet-overlay"
-      className={clsx('fixed inset-0 z-50 bg-black/50', className)}
+      className={cn('fixed inset-0 z-50 bg-black/50', className)}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -158,7 +158,7 @@ function SheetContent({
       <SheetOverlay />
       <motion.div
         data-slot="sheet-content"
-        className={clsx(
+        className={cn(
           'bg-background fixed z-50 flex flex-col gap-0 shadow-lg',
           sideClasses[side]
         )}
@@ -232,7 +232,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="sheet-header"
-      className={clsx(
+      className={cn(
         'flex flex-col gap-1.5 p-6 border-b border-border',
         className
       )}
@@ -245,7 +245,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="sheet-footer"
-      className={clsx(
+      className={cn(
         'flex flex-col-reverse gap-2 p-6 border-t border-border sm:flex-row sm:justify-end',
         className
       )}
@@ -258,7 +258,7 @@ function SheetTitle({ className, ...props }: React.ComponentProps<'h2'>) {
   return (
     <h2
       data-slot="sheet-title"
-      className={clsx('text-lg leading-none font-semibold', className)}
+      className={cn('text-lg leading-none font-semibold', className)}
       {...props}
     />
   );
@@ -268,7 +268,7 @@ function SheetDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <p
       data-slot="sheet-description"
-      className={clsx('text-muted-foreground text-sm', className)}
+      className={cn('text-muted-foreground text-sm', className)}
       {...props}
     />
   );
@@ -282,7 +282,7 @@ function SheetBody({ className, children, ...props }: SheetBodyProps) {
   return (
     <div
       data-slot="sheet-body"
-      className={clsx('flex-1 overflow-y-auto px-6 py-4', className)}
+      className={cn('flex-1 overflow-y-auto px-6 py-4', className)}
       {...props}
     >
       {children}

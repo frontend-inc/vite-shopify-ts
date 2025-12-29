@@ -1,5 +1,5 @@
 import React from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
@@ -9,7 +9,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
   return (
     <ol
       data-slot="breadcrumb-list"
-      className={clsx(
+      className={cn(
         'text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5',
         className
       )}
@@ -22,7 +22,7 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
   return (
     <li
       data-slot="breadcrumb-item"
-      className={clsx('inline-flex items-center gap-1.5', className)}
+      className={cn('inline-flex items-center gap-1.5', className)}
       {...props}
     />
   );
@@ -38,7 +38,7 @@ function BreadcrumbLink({
 }) {
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(children as React.ReactElement, {
-      className: clsx(
+      className: cn(
         'hover:text-foreground transition-colors',
         children.props.className,
         className
@@ -50,7 +50,7 @@ function BreadcrumbLink({
   return (
     <a
       data-slot="breadcrumb-link"
-      className={clsx('hover:text-foreground transition-colors', className)}
+      className={cn('hover:text-foreground transition-colors', className)}
       {...props}
     >
       {children}
@@ -65,7 +65,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={clsx('text-foreground font-normal', className)}
+      className={cn('text-foreground font-normal', className)}
       {...props}
     />
   );
@@ -81,7 +81,7 @@ function BreadcrumbSeparator({
       data-slot="breadcrumb-separator"
       role="presentation"
       aria-hidden="true"
-      className={clsx('[&>svg]:size-3.5', className)}
+      className={cn('[&>svg]:size-3.5', className)}
       {...props}
     >
       {children ?? (
@@ -113,7 +113,7 @@ function BreadcrumbEllipsis({
       data-slot="breadcrumb-ellipsis"
       role="presentation"
       aria-hidden="true"
-      className={clsx('flex size-9 items-center justify-center', className)}
+      className={cn('flex size-9 items-center justify-center', className)}
       {...props}
     >
       <svg

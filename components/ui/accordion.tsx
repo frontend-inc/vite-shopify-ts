@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface AccordionContextType {
   value: string | string[];
@@ -99,7 +99,7 @@ function AccordionItem({ value, children, className }: AccordionItemProps) {
     <AccordionItemContext.Provider value={{ value }}>
       <div
         data-slot="accordion-item"
-        className={clsx('border-b border-border last:border-b-0', className)}
+        className={cn('border-b border-border last:border-b-0', className)}
         data-value={value}
       >
         {children}
@@ -133,7 +133,7 @@ function AccordionTrigger({
     <div className="flex">
       <button
         data-slot="accordion-trigger"
-        className={clsx(
+        className={cn(
           'flex flex-1 items-start justify-between gap-4 rounded-md py-4 px-0 text-left text-sm font-medium transition-all outline-none hover:cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:rounded-md disabled:pointer-events-none disabled:opacity-50',
           isOpen && '[&>svg]:rotate-180',
           className
@@ -183,13 +183,13 @@ function AccordionContent({
     <div
       data-slot="accordion-content"
       data-state={isOpen ? 'open' : 'closed'}
-      className={clsx(
+      className={cn(
         'overflow-hidden text-sm transition-all duration-200',
         isOpen ? 'max-h-96' : 'max-h-0'
       )}
       {...props}
     >
-      <div className={clsx('pt-0 pb-4', className)}>{children}</div>
+      <div className={cn('pt-0 pb-4', className)}>{children}</div>
     </div>
   );
 }
