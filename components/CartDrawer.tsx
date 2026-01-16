@@ -39,7 +39,7 @@ const CartDrawer: React.FC = () => {
             {/* Header */}
             <SheetHeader className="h-14 min-h-0 px-4 py-3 flex items-center">
               <div className="flex items-center justify-between w-full">
-                <SheetTitle className="text-base font-heading">
+                <SheetTitle className="text-base">
                   Shopping Cart ({itemCount})
                 </SheetTitle>
                 <Button
@@ -185,7 +185,7 @@ const CartDrawer: React.FC = () => {
                   <Button
                     onClick={handleCheckout}
                     disabled={loading || !checkoutUrl}
-                    className="w-full font-heading"
+                    className="w-full"
                     size="lg"
                   >
                     {loading ? (

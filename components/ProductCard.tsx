@@ -134,7 +134,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
         {/* View Details Button */}
         <Link to={`/products/${product.handle}`}>
-          <Button className="w-full font-heading">
+          <Button className="w-full">
             View Details
           </Button>
         </Link>
