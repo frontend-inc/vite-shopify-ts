@@ -24,7 +24,7 @@ const CartDrawer: React.FC = () => {
   };
 
   const getItemImage = (item: typeof items[0]) => {
-    return item.merchandise.product.images.edges[0]?.node.url;
+    return item.merchandise.image?.url;
   };
 
   const getSelectedOptions = (item: typeof items[0]) => {
