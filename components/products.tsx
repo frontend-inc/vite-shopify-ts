@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ProductCard from './ProductCard';
+import ProductCard from './product-card';
 import { getProducts } from '../services/shopify/api.js';
 import { Button } from './ui/button';
 import { Spinner } from './ui/spinner';

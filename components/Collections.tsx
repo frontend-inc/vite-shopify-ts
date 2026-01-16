@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCollections } from '../services/shopify/api.js';
-import CollectionCard from './CollectionCard';
+import CollectionCard from './collection-card';
 
 interface CollectionImage {
   url: string;

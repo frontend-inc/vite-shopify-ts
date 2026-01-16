@@ -1,9 +1,9 @@
 import React from 'react';
-import { useCartDrawer } from '../contexts/CartContext';
-import { useShopifyCart } from '../hooks/use-cart';
+import { useCartDrawer } from '../contexts/cart-context.js';
+import { useShopifyCart } from '../hooks/use-shopify-cart.js';
 import { redirectToCheckout } from '../services/shopify/api.js';
-import { Button } from './ui/button';
-import { Spinner } from './ui/spinner';
+import { Button } from './ui/button.js';
+import { Spinner } from './ui/spinner.js';
 import {
   Sheet,
   SheetContent,
@@ -11,7 +11,7 @@ import {
   SheetTitle,
   SheetBody,
   AnimatePresence,
-} from './ui/sheet';
+} from './ui/sheet.js';
 
 const CartDrawer: React.FC = () => {
   const { isOpen, closeCart } = useCartDrawer();

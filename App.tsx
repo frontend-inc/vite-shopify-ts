@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { CartProvider } from './contexts/CartContext';
+import { CartProvider } from './contexts/cart-context';
 import Home from '@/components/Home';
-import ProductDetail from './components/ProductDetail';
+import ProductDetail from './components/product-detail';
 import Collections from './components/Collections';
-import CollectionDetail from './components/CollectionDetail';
-import CartDrawer from './components/CartDrawer';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import CollectionDetail from './components/collection-detail';
+import CartDrawer from './components/cart-drawer';
+import Header from './components/shop-header';
+import Footer from './components/shop-footer';
 
 const AppContent: React.FC = () => {
   return (

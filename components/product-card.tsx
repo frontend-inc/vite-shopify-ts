@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../contexts/CartContext';
+import { useCart } from '../contexts/cart-context.js';
 import { addCartLines } from '../services/shopify/api.js';
 import { truncate } from '../lib/utils';
 import { Button } from './ui/button';

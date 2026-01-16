@@ -1,8 +1,8 @@
 import React from 'react';
 import { Product, ProductVariant } from './index.tsx';
-import { Button } from '../ui/button';
-import { Badge } from '../ui/badge';
-import { Spinner } from '../ui/spinner';
+import { Button } from '../ui/button.tsx';
+import { Badge } from '../ui/badge.tsx';
+import { Spinner } from '../ui/spinner.tsx';
 
 interface ProductDetailInfoProps {
   product: Product;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCollectionProducts } from '../services/shopify/api.js';
-import ProductCard from './ProductCard';
+import { getCollectionProducts } from '../services/shopify/api';
+import ProductCard from './product-card';
 
 interface ProductImage {
   url: string;

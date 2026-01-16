@@ -1,4 +1,4 @@
-import { useCart } from '../contexts/CartContext';
+import { useCart } from '../contexts/cart-context';
 
 // Re-export cart functionality from context for backwards compatibility
 // This ensures all components share the same cart state

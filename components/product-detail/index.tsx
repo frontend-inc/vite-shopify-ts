@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProduct } from '../../services/shopify/api.js';
-import { useCart } from '../../contexts/CartContext';
-import ProductDetailGallery from './ProductDetailGallery';
-import ProductDetailInfo from './ProductDetailInfo';
-import ProductRecommendations from './ProductRecommendations';
+import { useCart } from '../../contexts/cart-context.js';
+import ProductDetailGallery from './product-detail-gallery';
+import ProductDetailInfo from './product-detail-info';
+import ProductRecommendations from './product-recommendations';
 import { Button } from '../ui/button';
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
 import {

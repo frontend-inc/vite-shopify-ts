@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCartDrawer } from '../contexts/CartContext';
-import { useShopifyCart } from '../hooks/use-cart';
+import { useCartDrawer } from '../contexts/cart-context';
+import { useShopifyCart } from '../hooks/use-shopify-cart';
 
 const CartIcon: React.FC = () => {
   const { toggleCart } = useCartDrawer();

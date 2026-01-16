@@ -1,5 +1,5 @@
 // Main Shopify API service that combines all functionality
-export { shopifyFetch, SHOPIFY_STORE_DOMAIN, SHOPIFY_STOREFRONT_API_URL } from './index.js';
+export { shopifyFetch, SHOPIFY_STORE_DOMAIN, SHOPIFY_STOREFRONT_API_URL } from './client.js';
 
 // Product functions
 export { 
