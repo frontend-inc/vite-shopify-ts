@@ -1,149 +1,78 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { createCart, getCart, addCartLines, removeCartLines, updateCartLines } from '../services/shopify/api.js';
 
-interface CartItem {
-  variantId: string;
-  productId: string;
-  title: string;
-  price: {
-    amount: string;
-    currencyCode: string;
-  };
-  image?: string;
+const CART_ID_KEY = 'cartId';
+
+interface CartLine {
+  id: string;
   quantity: number;
-  variant: {
+  merchandise: {
+    id: string;
     title: string;
-    selectedOptions: Array<{
+    price: {
+      amount: string;
+      currencyCode: string;
+    };
+    selectedOptions?: Array<{
       name: string;
       value: string;
     }>;
+    product: {
+      title: string;
+      handle?: string;
+      images: {
+        edges: Array<{
+          node: {
+            url: string;
+            altText: string | null;
+          };
+        }>;
+      };
+    };
   };
 }
 
-interface CartState {
-  items: CartItem[];
-  isOpen: boolean;
-  itemCount: number;
-  totalAmount: number;
-}
-
-type CartAction =
-  | { type: 'ADD_ITEM'; payload: Omit<CartItem, 'quantity'> & { quantity?: number } }
-  | { type: 'REMOVE_ITEM'; payload: { variantId: string } }
-  | { type: 'UPDATE_QUANTITY'; payload: { variantId: string; quantity: number } }
-  | { type: 'TOGGLE_CART' }
-  | { type: 'OPEN_CART' }
-  | { type: 'CLOSE_CART' }
-  | { type: 'CLEAR_CART' };
-
-const initialState: CartState = {
-  items: [],
-  isOpen: false,
-  itemCount: 0,
-  totalAmount: 0,
-};
-
-function cartReducer(state: CartState, action: CartAction): CartState {
-  switch (action.type) {
-    case 'ADD_ITEM': {
-      const { quantity = 1, ...item } = action.payload;
-      const existingItemIndex = state.items.findIndex(
-        cartItem => cartItem.variantId === item.variantId
-      );
-
-      let newItems;
-      if (existingItemIndex > -1) {
-        // Update existing item quantity
-        newItems = state.items.map((cartItem, index) =>
-          index === existingItemIndex
-            ? { ...cartItem, quantity: cartItem.quantity + quantity }
-            : cartItem
-        );
-      } else {
-        // Add new item
-        newItems = [...state.items, { ...item, quantity }];
-      }
-
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-      const totalAmount = newItems.reduce(
-        (sum, item) => sum + parseFloat(item.price.amount) * item.quantity,
-        0
-      );
-
-      return {
-        ...state,
-        items: newItems,
-        itemCount,
-        totalAmount,
-      };
-    }
-
-    case 'REMOVE_ITEM': {
-      const newItems = state.items.filter(item => item.variantId !== action.payload.variantId);
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-      const totalAmount = newItems.reduce(
-        (sum, item) => sum + parseFloat(item.price.amount) * item.quantity,
-        0
-      );
-
-      return {
-        ...state,
-        items: newItems,
-        itemCount,
-        totalAmount,
-      };
-    }
-
-    case 'UPDATE_QUANTITY': {
-      const { variantId, quantity } = action.payload;
-      
-      if (quantity <= 0) {
-        return cartReducer(state, { type: 'REMOVE_ITEM', payload: { variantId } });
-      }
-
-      const newItems = state.items.map(item =>
-        item.variantId === variantId ? { ...item, quantity } : item
-      );
-
-      const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-      const totalAmount = newItems.reduce(
-        (sum, item) => sum + parseFloat(item.price.amount) * item.quantity,
-        0
-      );
-
-      return {
-        ...state,
-        items: newItems,
-        itemCount,
-        totalAmount,
-      };
-    }
-
-    case 'TOGGLE_CART':
-      return { ...state, isOpen: !state.isOpen };
-
-    case 'OPEN_CART':
-      return { ...state, isOpen: true };
-
-    case 'CLOSE_CART':
-      return { ...state, isOpen: false };
-
-    case 'CLEAR_CART':
-      return { ...initialState };
-
-    default:
-      return state;
-  }
+interface ShopifyCart {
+  id: string;
+  lines: {
+    edges: Array<{
+      node: CartLine;
+    }>;
+  };
+  cost: {
+    totalAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+    subtotalAmount?: {
+      amount: string;
+      currencyCode: string;
+    };
+    totalTaxAmount?: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+  checkoutUrl: string;
 }
 
 interface CartContextType {
-  state: CartState;
-  addItem: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => void;
-  removeItem: (variantId: string) => void;
-  updateQuantity: (variantId: string, quantity: number) => void;
-  toggleCart: () => void;
+  isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
-  clearCart: () => void;
+  toggleCart: () => void;
+  cartId: string | null;
+  cart: ShopifyCart | null;
+  items: CartLine[];
+  itemCount: number;
+  totalAmount: number;
+  checkoutUrl: string | null;
+  loading: boolean;
+  error: string | null;
+  addItem: (variantId: string, quantity?: number) => Promise<ShopifyCart>;
+  removeItem: (lineId: string) => Promise<ShopifyCart>;
+  updateItemQuantity: (lineId: string, quantity: number) => Promise<ShopifyCart>;
+  refreshCart: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -156,77 +85,178 @@ export const useCart = () => {
   return context;
 };
 
+export const useCartDrawer = useCart;
+
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState, (initial) => {
-    // Load cart from localStorage on initialization
-    if (typeof window !== 'undefined') {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart) {
-        try {
-          const parsedCart = JSON.parse(savedCart);
-          const itemCount = parsedCart.items.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
-          const totalAmount = parsedCart.items.reduce(
-            (sum: number, item: CartItem) => sum + parseFloat(item.price.amount) * item.quantity,
-            0
-          );
-          return { ...parsedCart, itemCount, totalAmount, isOpen: false };
-        } catch (error) {
-          console.error('Error loading cart from localStorage:', error);
-        }
+  const [isOpen, setIsOpen] = useState(false);
+  const [cartId, setCartId] = useState<string | null>(null);
+  const [cart, setCart] = useState<ShopifyCart | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const storeCartId = useCallback((id: string) => {
+    localStorage.setItem(CART_ID_KEY, id);
+    setCartId(id);
+  }, []);
+
+  const refreshCart = useCallback(async () => {
+    const storedCartId = localStorage.getItem(CART_ID_KEY);
+    if (!storedCartId) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      const fetchedCart = await getCart(storedCartId);
+      if (fetchedCart) {
+        setCart(fetchedCart);
+        setCartId(storedCartId);
+      } else {
+        localStorage.removeItem(CART_ID_KEY);
+        setCartId(null);
+        setCart(null);
       }
+    } catch (err) {
+      console.error('Error fetching cart:', err);
+      localStorage.removeItem(CART_ID_KEY);
+      setCartId(null);
+      setCart(null);
+      setError('Failed to fetch cart');
+    } finally {
+      setLoading(false);
     }
-    return initial;
-  });
+  }, []);
 
-  // Save cart to localStorage whenever it changes
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('cart', JSON.stringify({
-        items: state.items,
-        itemCount: state.itemCount,
-        totalAmount: state.totalAmount,
-      }));
+    refreshCart();
+  }, [refreshCart]);
+
+  const getOrCreateCart = useCallback(async (): Promise<string> => {
+    if (cartId) return cartId;
+
+    const storedCartId = localStorage.getItem(CART_ID_KEY);
+    if (storedCartId) {
+      setCartId(storedCartId);
+      return storedCartId;
     }
-  }, [state.items, state.itemCount, state.totalAmount]);
 
-  const addItem = (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => {
-    dispatch({ type: 'ADD_ITEM', payload: item });
-  };
+    try {
+      const newCart = await createCart();
+      setCart(newCart);
+      storeCartId(newCart.id);
+      return newCart.id;
+    } catch (err) {
+      console.error('Failed to create cart:', err);
+      throw err;
+    }
+  }, [cartId, storeCartId]);
 
-  const removeItem = (variantId: string) => {
-    dispatch({ type: 'REMOVE_ITEM', payload: { variantId } });
-  };
+  const openCart = useCallback(() => {
+    setIsOpen(true);
+  }, []);
 
-  const updateQuantity = (variantId: string, quantity: number) => {
-    dispatch({ type: 'UPDATE_QUANTITY', payload: { variantId, quantity } });
-  };
+  const closeCart = useCallback(() => {
+    setIsOpen(false);
+  }, []);
 
-  const toggleCart = () => {
-    dispatch({ type: 'TOGGLE_CART' });
-  };
+  const toggleCart = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
 
-  const openCart = () => {
-    dispatch({ type: 'OPEN_CART' });
-  };
+  const addItem = useCallback(async (variantId: string, quantity: number = 1): Promise<ShopifyCart> => {
+    try {
+      setLoading(true);
+      setError(null);
 
-  const closeCart = () => {
-    dispatch({ type: 'CLOSE_CART' });
-  };
+      const currentCartId = await getOrCreateCart();
+      const updatedCart = await addCartLines(currentCartId, [
+        { merchandiseId: variantId, quantity },
+      ]);
 
-  const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' });
-  };
+      setCart(updatedCart);
+      return updatedCart;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to add item to cart';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [getOrCreateCart]);
+
+  const removeItem = useCallback(async (lineId: string): Promise<ShopifyCart> => {
+    if (!cartId) {
+      throw new Error('No cart exists');
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const updatedCart = await removeCartLines(cartId, [lineId]);
+      setCart(updatedCart);
+      return updatedCart;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to remove item from cart';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [cartId]);
+
+  const updateItemQuantity = useCallback(async (lineId: string, quantity: number): Promise<ShopifyCart> => {
+    if (!cartId) {
+      throw new Error('No cart exists');
+    }
+
+    if (quantity <= 0) {
+      return removeItem(lineId);
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const updatedCart = await updateCartLines(cartId, [
+        { id: lineId, quantity },
+      ]);
+      setCart(updatedCart);
+      return updatedCart;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update item quantity';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [cartId, removeItem]);
+
+  const items = cart?.lines?.edges?.map((edge) => edge.node) ?? [];
+  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalAmount = parseFloat(cart?.cost?.totalAmount?.amount ?? '0');
+  const checkoutUrl = cart?.checkoutUrl ?? null;
 
   return (
     <CartContext.Provider value={{
-      state,
-      addItem,
-      removeItem,
-      updateQuantity,
-      toggleCart,
+      isOpen,
       openCart,
       closeCart,
-      clearCart,
+      toggleCart,
+      cartId,
+      cart,
+      items,
+      itemCount,
+      totalAmount,
+      checkoutUrl,
+      loading,
+      error,
+      addItem,
+      removeItem,
+      updateItemQuantity,
+      refreshCart,
     }}>
       {children}
     </CartContext.Provider>

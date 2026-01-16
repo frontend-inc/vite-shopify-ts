@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../contexts/CartContext';
+import { useCartDrawer } from '../contexts/CartContext';
+import { useShopifyCart } from '../hooks/use-cart';
 
 const CartIcon: React.FC = () => {
-  const { state, toggleCart } = useCart();
+  const { toggleCart } = useCartDrawer();
+  const { itemCount } = useShopifyCart();
 
   return (
     <button
@@ -11,9 +13,9 @@ const CartIcon: React.FC = () => {
       className="relative p-1 text-black hover:text-gray-600 transition-colors"
     >
       <i className="ri-shopping-cart-line text-xl"></i>
-      {state.itemCount > 0 && (
+      {itemCount > 0 && (
         <span className="absolute -top-1 -right-1 bg-black text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-semibold">
-          {state.itemCount > 99 ? '99+' : state.itemCount}
+          {itemCount > 99 ? '99+' : itemCount}
         </span>
       )}
     </button>
@@ -34,13 +36,13 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-6">
             <Link
               to="/"
-              className="text-sm text-black hover:text-gray-600 font-medium transition-colors font-heading"
+              className="text-sm text-black hover:text-gray-600 font-medium transition-colors"
             >
               Products
             </Link>
             <Link
               to="/collections"
-              className="text-sm text-black hover:text-gray-600 font-medium transition-colors font-heading"
+              className="text-sm text-black hover:text-gray-600 font-medium transition-colors"
             >
               Collections
             </Link>

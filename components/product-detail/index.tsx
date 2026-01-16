@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getProduct, getProductRecommendations } from '../../services/shopify/api.js';
+import { useParams, Link } from 'react-router-dom';
+import { getProduct } from '../../services/shopify/api.js';
 import { useCart } from '../../contexts/CartContext';
 import ProductDetailGallery from './ProductDetailGallery';
 import ProductDetailInfo from './ProductDetailInfo';
 import ProductRecommendations from './ProductRecommendations';
 import { Button } from '../ui/button';
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '../ui/breadcrumb';
 
 interface ProductImage {
   url: string;
@@ -72,6 +80,7 @@ const ProductDetail: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   useEffect(() => {
     if (!handle) return;
@@ -139,27 +148,18 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedVariant || !product) return;
-    
-    const firstImage = product.images.edges[0]?.node;
-    
-    // Add to cart using context
-    addItem({
-      variantId: selectedVariant.id,
-      productId: product.id,
-      title: product.title,
-      price: selectedVariant.price,
-      image: firstImage?.url,
-      quantity,
-      variant: {
-        title: selectedVariant.title,
-        selectedOptions: selectedVariant.selectedOptions,
-      },
-    });
 
-    // Open cart drawer
-    openCart();
+    try {
+      setAddingToCart(true);
+      await addItem(selectedVariant.id, quantity);
+      openCart();
+    } catch (err) {
+      console.error('Failed to add item to cart:', err);
+    } finally {
+      setAddingToCart(false);
+    }
   };
 
   if (loading) {
@@ -214,6 +214,25 @@ const ProductDetail: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8">
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/">Home</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/">Products</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{product.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <ProductDetailGallery
             images={product.images.edges.map(edge => edge.node)}
@@ -228,6 +247,7 @@ const ProductDetail: React.FC = () => {
             setQuantity={setQuantity}
             handleAddToCart={handleAddToCart}
             onOptionChange={handleOptionChange}
+            loading={addingToCart}
           />
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { addCartLines } from '../services/shopify/api.js';
 import { truncate } from '../lib/utils';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -52,8 +53,8 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
-  const { addItem, openCart } = useCart();
-  
+  const { cartId, openCart } = useCart();
+
   const firstImage = product.images.edges[0]?.node;
   const price = product.priceRange.minVariantPrice;
   const compareAtPrice = product.compareAtPriceRange?.minVariantPrice;
@@ -68,31 +69,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     }).format(parseFloat(price.amount));
   };
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation when clicking add to cart
     e.stopPropagation();
-    
-    if (!firstVariant || !isAvailable) return;
 
-    // Add to cart using context
-    addItem({
-      variantId: firstVariant.id,
-      productId: product.id,
-      title: product.title,
-      price: firstVariant.price,
-      image: firstImage?.url,
-      variant: {
-        title: firstVariant.title,
-        selectedOptions: [], // Will be populated if variant has options
-      },
-    });
+    if (!firstVariant || !isAvailable || !cartId) return;
 
-    // Open cart drawer
-    openCart();
+    try {
+      await addCartLines(cartId, [{ merchandiseId: firstVariant.id, quantity: 1 }]);
+      openCart();
 
-    // Call optional callback
-    if (onAddToCart) {
-      onAddToCart(product);
+      if (onAddToCart) {
+        onAddToCart(product);
+      }
+    } catch (err) {
+      console.error('Failed to add item to cart:', err);
     }
   };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Product, ProductVariant } from './index.tsx';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
+import { Spinner } from '../ui/spinner';
 
 interface ProductDetailInfoProps {
   product: Product;
@@ -11,6 +12,7 @@ interface ProductDetailInfoProps {
   setQuantity: (quantity: number) => void;
   handleAddToCart: () => void;
   onOptionChange: (optionName: string, value: string) => void;
+  loading?: boolean;
 }
 
 const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
@@ -20,7 +22,8 @@ const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
   quantity,
   setQuantity,
   handleAddToCart,
-  onOptionChange
+  onOptionChange,
+  loading = false,
 }) => {
   const formatPrice = (price: { amount: string; currencyCode: string }) => {
     return new Intl.NumberFormat('en-US', {
@@ -115,11 +118,20 @@ const ProductDetailInfo: React.FC<ProductDetailInfoProps> = ({
       {/* Add to Cart Button */}
       <Button
         onClick={handleAddToCart}
-        disabled={!selectedVariant?.availableForSale}
+        disabled={!selectedVariant?.availableForSale || loading}
         size="lg"
         className="w-full text-lg font-heading"
       >
-        {selectedVariant?.availableForSale ? 'Add to Cart' : 'Out of Stock'}
+        {loading ? (
+          <span className="flex items-center justify-center gap-2">
+            <Spinner size="sm" />
+            <span>Adding...</span>
+          </span>
+        ) : selectedVariant?.availableForSale ? (
+          'Add to Cart'
+        ) : (
+          'Out of Stock'
+        )}
       </Button>
 
       {/* Additional Info */}
